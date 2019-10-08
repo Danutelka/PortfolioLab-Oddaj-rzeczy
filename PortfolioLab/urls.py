@@ -20,7 +20,7 @@ from oddaj.views import IndexView, FormConfView, FormView, LoginView, RegisterVi
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('/', IndexView.as_view(), name="index"),
+    path('', IndexView.as_view(), name="index"),
     path('formconf', FormConfView.as_view(), name="form-conf"),
     path('form', FormView.as_view(), name="form"),
     path('login', LoginView.as_view(), name="login"),

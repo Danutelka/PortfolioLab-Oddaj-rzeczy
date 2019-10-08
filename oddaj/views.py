@@ -17,7 +17,7 @@ class FormConfView(View):
 
 class FormView(View):
     def get(self, request):
-        return TemplateResponse(request, 'form.html')
+        return TemplateResponse(request, 'add-donation.html')
 
 class LoginView(View):
     def get(self, request):

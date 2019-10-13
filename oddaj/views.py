@@ -23,7 +23,7 @@ from .forms import RegisterForm, LoginForm
 class BaseView(View):
     def get(self, request):
         fundacje = Institution.objects.filter(typ=0)
-        kat = Institution.categories.all()
+        #kat = Institution.categories.all()
         organizacje = Institution.objects.filter(typ=1)
         #kat2 = organizacje.categories.all()
         zbiorki = Institution.objects.filter(typ=2)
@@ -32,7 +32,7 @@ class BaseView(View):
             "fundacje" : fundacje,
             "organizacje": organizacje,
             "zbiorki": zbiorki,
-            "kat": kat
+            #"kat": kat
             # "kat2": kat2,
             # "kat3": kat3
         }

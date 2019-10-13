@@ -7,28 +7,38 @@
 
     <section class="login-page">
       <h2>Załóż konto</h2>
+      
       <form>
-        <div class="form-group">
-          <input type="text" name="name" placeholder="Imię" />
-        </div>
-         <div class="form-group">
-          <input type="text" name="surname" placeholder="Nazwisko" />
-        </div>
-        <div class="form-group">
-          <input type="email" name="email" placeholder="Email" />
-        </div>
-        <div class="form-group">
-          <input type="password" name="password" placeholder="Hasło" />
-        </div>
-        <div class="form-group">
-          <input type="password" name="password2" placeholder="Powtórz hasło" />
-        </div>
-
+        {% if error %}
+          {% for er in error %}
+            <p style="color: red"></p>
+          {% endfor %}
+        {% endif %}
+          <div class="form-group"> 
+          <form method="post" action='/register'>
+          {% csrf_token %}
+          </div>
+            <div class="form-group">
+              <input type="text" name="first_name" placeholder="Imię" value="{{ first_name }}"/>
+            </div>
+            <div class="form-group">
+              <input type="text" name="last_name" placeholder="Nazwisko" value="{{ last_name }}"/>
+            </div>
+            <div class="form-group">
+              <input type="email" name="email" placeholder="Email" value="{{ email }}"/>
+            </div>
+            <div class="form-group">
+              <input type="password" name="password" placeholder="Hasło" value="{{ password }}"/>
+            </div>
+            <div class="form-group">
+              <input type="password" name="password2" placeholder="Powtórz hasło" value="{{ user.email }}"/>
+            </div> 
         <div class="form-group form-group--buttons">
-          <a href="login.html" class="btn btn--without-border">Zaloguj się</a>
-          <button class="btn" type="submit">Załóż konto</button>
+          <a href="login" class="btn btn--without-border">Zaloguj się</a>
+          <input class="btn" type="submit" value="Załóż konto">
         </div>
       </form>
     </section>
 
 {% endblock %}
+

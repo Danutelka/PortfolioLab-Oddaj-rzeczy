@@ -5,11 +5,11 @@
         {% if request.user.is_authenticated %}
             <ul class="nav--actions">
                 <li class="logged-user">
-                    Witaj Agata
+                    Witaj {{ request.user.email }}
                     <ul class="dropdown">
                         <li><a href="#">Profil</a></li>
                         <li><a href="#">Moje zbiórki</a></li>
-                        <li><a href="#">Wyloguj</a></li>
+                        <li><a href="{% url 'userlogout' %}">Wyloguj</a></li>
                     </ul>
                 </li>
             </ul>
@@ -39,7 +39,7 @@
         </ul>
       </nav>
 
-      <div class="slogan container container--90">
+  <div class="slogan container container--90">
         <div class="slogan--item">
           <h1>
             Zacznij pomagać!<br />
@@ -47,13 +47,15 @@
           </h1>
         </div>
       </div>
-
+    {% comment %} 
        <div class="slogan container container--90">
         <div class="slogan--item">
           <h1>
             Oddaj rzeczy, których już nie chcesz<br />
             <span class="uppercase">potrzebującym</span>
           </h1>
+        </div>
+       </div> {% endcomment %}
 
           {% comment %} <div class="slogan--steps">
             <div class="slogan--steps-title">Wystarczą 4 proste kroki:</div>

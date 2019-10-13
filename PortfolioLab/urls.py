@@ -16,13 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls.static import static
-from oddaj.views import IndexView, FormConfView, FormView, LoginView, RegisterView
+from oddaj.views import IndexView, FormConfView, FormView, LoginView, LogoutView, RegisterView, BaseView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', BaseView.as_view(), name="base"),
     path('index', IndexView.as_view(), name="index"),
     path('formconf', FormConfView.as_view(), name="form-conf"),
     path('form', FormView.as_view(), name="form"),
     path('login', LoginView.as_view(), name="login"),
-    path('register', RegisterView.as_view(), name="register")
+    path('register', RegisterView.as_view(), name="register"),
+    path('logout', LogoutView.as_view(), name="userlogout")
 ]

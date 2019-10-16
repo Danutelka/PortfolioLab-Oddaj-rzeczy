@@ -17,22 +17,22 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Avg, Max, Min, Sum
 from django.db.models import Count
 from .models import Category, Institution, Donation, TYP
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, AddDonationForm
 
 # Create your views here.
 class BaseView(View):
     def get(self, request):
-        fundacje = Institution.objects.filter(typ=0)
         #kat = Institution.categories.all()
-        organizacje = Institution.objects.filter(typ=1)
+        fundacje = Institution.objects.filter(typ="fundacja")
+        organizacje = Institution.objects.filter(typ="organizacja pozarządowa")
         #kat2 = organizacje.categories.all()
-        zbiorki = Institution.objects.filter(typ=2)
+        zbiorki = Institution.objects.filter(typ="zbiórka lokalna")
         #kat3 = zbiorki.categories.all()
         ctx = {
             "fundacje" : fundacje,
             "organizacje": organizacje,
             "zbiorki": zbiorki,
-            #"kat": kat
+            # "kat": kat
             # "kat2": kat2,
             # "kat3": kat3
         }
@@ -41,8 +41,8 @@ class BaseView(View):
 class IndexView(View):
     def get(self, request):
         worki = list(Donation.objects.all().aggregate(Sum('quantity')).values())[0]
-        fundacje = Institution.objects.count()
-        return render(request, 'index.html', context={'worki':worki, 'fundacje':fundacje})
+        wszystkie = Institution.objects.count()
+        return render(request, 'index.html', context={'worki':worki, 'wszystkie':wszystkie})
         
 class FormConfView(View):
     def get(self, request):
@@ -50,13 +50,30 @@ class FormConfView(View):
 
 class FormView(View):
     def get(self, request):
-        return TemplateResponse(request, 'add-donation.html')
+        form = AddDonationForm()
+        return TemplateResponse(request, 'add-donation.html', context={'form':form})
+    def post(self, reguest):
+        form = AddDonationForm(request.POST)
+        if form.is_valid():
+            categories = form.cleaned_data['categories']
+            quantity = form.cleaned_data['quantity']
+            institution = form.cleaned_data['institution']
+            adress = form.cleaned_data['adress']
+            city = form.cleaned_data['city']
+            zip_code = form.cleaned_data['zip_code']
+            phone_number = form.cleaned_data['phone_number']
+            pick_up_date = form.cleaned_data['pick_up_date']
+            pick_up_time = form.cleaned_data['pick_up_time']
+            pick_up_comment = form.cleaned_data['pick_up_comment']
+            form.save()
+            Donation.objects.create(categories=categories, quantity=quantity,  \
+                institution=institution, adress=adress, city=city, zip_code=zip_code,  \
+                phone_number=phone_number, pick_up_date=pick_up_date,  \
+                pick_up_time=pick_up_time, pick_up_comment=pick_up_comment)
+            return HttpResponse("OK")
+        else:
+            return TemplateResponse(request, 'add-donation.html', context={'form':form})
 
-# class RegisterView(CreateView):
-#     template_name = 'register.html'
-#     model = User
-#     fields = ['first_name', 'last_name', 'email', 'password']
-#     success_url = "index"
 class RegisterView(View):
     def get(self, request):
         form = RegisterForm()
@@ -68,35 +85,48 @@ class RegisterView(View):
             print('form is valid')
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
-            email = form.cleaned_data['email']
+            username= form.cleaned_data['username']
             password = form.cleaned_data['password']
-            password_again = form.cleaned_data['password_again']
-            if not User.objects.filter(email=email).exists():
-                if password == password_again:
+            password2 = form.cleaned_data['password2']
+            if not User.objects.filter(username=username).exists():
+                if password == password2:
                     form.save()
-                    User.objects.create(first_name=first_name, last_name=last_name, email=email, password=password)
+                    User.objects.create_user(username, password, first_name=first_name, last_name=last_name)
                     return HttpResponseRedirect("index")
                 else:
                     error.append('Hasła są różne')
             else:
                 error.append('użytkownik isnieje')
-        return render(request, 'register.html', cotext={'form':form, 'error':error})
+#  return render(request, 'register.html', cotext={'form':form, 'error':error})
 
 class LoginView(View):
-    def get(self, request):
-        form = LoginForm()
-        return TemplateResponse(request, 'login.html', context={'form':form})
-    def post(self, request):
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            email, password = form.cleaned_data.values()
-            user = authenticate(email=email, password=password)
-            if user is not None:
-                login(request, user)
-                return TemplateResponse(request, 'index.html')
-            else:
-                return HttpResponseRedirect("register")
-        return TemplateResponse(request, 'login.html', context={'form':form})
+     def get(self, request):
+         form = LoginForm()
+         return TemplateResponse(request, 'login.html', context={'form':form})
+     def post(self, request):
+         form = LoginForm(request.POST)
+         if form.is_valid():
+             username, password = form.cleaned_data.values()
+             user = authenticate(username=username, password=password)
+             if user is not None:
+                 login(request, user)
+                 return HttpResponseRedirect("index")
+             else:
+                 return HttpResponseRedirect("register")
+         return TemplateResponse(request, 'login.html', context={'form':form})
+
+# class LoginView(View):
+#     def get(self, request):
+#         return render(request, 'login.html')
+#     def post(self, request):
+#         username = request.POST.get('username', '')
+#         password = request.POST.get('password', '')
+#         user = authenticate(username=username, password=password)
+#         if user is not None:
+#             login(request, user)
+#             return redirect("index")
+#         else:
+#             return redirect("register")
 
 class LogoutView(View):
     def get(self, request):

@@ -7,9 +7,9 @@
                     <ul class="dropdown">
                         <li><a href="#">Profil</a></li>
                         <li><a href="#">Moje zbiórki</a></li>
-                        {% comment %} {% if request.user.is_superuser %}
-                            <li><a href="{% url 'admin' %}">Panel administracyjny</a></li>
-                        {% endif %} {% endcomment %}
+                        {% if request.user.is_superuser %}
+                            <li><a href="admin/">Panel administracyjny</a></li>
+                        {% endif %}
                         <li><a href="{% url 'userlogout' %}">Wyloguj</a></li>
                     </ul>
                 </li>

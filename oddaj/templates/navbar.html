@@ -1,9 +1,4 @@
-{% load static %}
 
-<header class="header--main-page">
-
-{% include "navbar.html" %}
-{% comment %} 
       <nav class="container container--70">
         {% if request.user.is_authenticated %}
             <ul class="nav--actions">
@@ -12,6 +7,9 @@
                     <ul class="dropdown">
                         <li><a href="#">Profil</a></li>
                         <li><a href="#">Moje zbiórki</a></li>
+                        {% comment %} {% if request.user.is_superuser %}
+                            <li><a href="{% url 'admin' %}">Panel administracyjny</a></li>
+                        {% endif %} {% endcomment %}
                         <li><a href="{% url 'userlogout' %}">Wyloguj</a></li>
                     </ul>
                 </li>
@@ -22,7 +20,7 @@
                 <li><a href="{% url 'register' %}" class="btn btn--small btn--highlighted">Załóż konto</a></li>
             </ul>
         {% endif %}
-        
+
         <ul>
           <li><a href="{% url 'index' %}" class="btn btn--without-border active">Start</a></li>
           <li><a href="#steps" class="btn btn--without-border">O co chodzi?</a></li>
@@ -31,43 +29,4 @@
           <li><a href="{% url 'form' %}" class="btn btn--without-border">Przekaż dary</a></li>
           <li><a href="#contact" class="btn btn--without-border">Kontakt</a></li>
         </ul>
-      </nav> {% endcomment %}
-
-  <div class="slogan container container--90">
-        <div class="slogan--item">
-          <h1>
-            Zacznij pomagać!<br />
-            Oddaj niechciane rzeczy w zaufane ręce
-          </h1>
-        </div>
-      </div>
-    {% comment %} 
-       <div class="slogan container container--90">
-        <div class="slogan--item">
-          <h1>
-            Oddaj rzeczy, których już nie chcesz<br />
-            <span class="uppercase">potrzebującym</span>
-          </h1>
-        </div>
-       </div> {% endcomment %}
-
-          {% comment %} <div class="slogan--steps">
-            <div class="slogan--steps-title">Wystarczą 4 proste kroki:</div>
-            <ul class="slogan--steps-boxes">
-              <li>
-                <div><em>1</em><span>Wybierz rzeczy</span></div>
-              </li>
-              <li>
-                <div><em>2</em><span>Spakuj je w worki</span></div>
-              </li>
-              <li>
-                <div><em>3</em><span>Wybierz fundację</span></div>
-              </li>
-              <li>
-                <div><em>4</em><span>Zamów kuriera</span></div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div> {% endcomment %}
-</header>
+      </nav>

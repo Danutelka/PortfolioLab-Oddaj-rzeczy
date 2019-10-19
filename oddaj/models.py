@@ -12,6 +12,10 @@ TYP = (
 class Category(models.Model):
     name = models.CharField(max_length=128)
 
+    class Meta:
+        verbose_name = "Kategoria"
+        verbose_name_plural = "Kategorie"
+
     def __str__(self):
         return "{}" .format(self.name)
 
@@ -21,9 +25,12 @@ class Institution(models.Model):
     typ = models.CharField(choices=TYP, default="fundacja", max_length=128)
     categories = models.ManyToManyField(Category)
 
-    def __str__(self):
+    class Meta:
+        verbose_name = "Instytucja"
+        verbose_name_plural = "Instytucje"
 
-        return "{}" .format(self.name)
+    def __str__(self):
+        return "{} {};" .format(self.name, self.typ)
 
 class Donation(models.Model):
     quantity = models.IntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(100)])
@@ -37,6 +44,10 @@ class Donation(models.Model):
     pick_up_time = models.TimeField()
     pick_up_comment = models.CharField(max_length=250)
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+
+    class Meta:
+        verbose_name = "Dar"
+        verbose_name_plural = "Dary"
 
     def __str__(self):
         return "{} {}" .format(self.user, self.quantity)

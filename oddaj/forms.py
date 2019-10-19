@@ -8,16 +8,16 @@ from .models import Category, Institution, Donation, TYP
 #         model = User
 #         fields = ['username', 'first_name', 'last_name', 'password' 'num_vote_up', 'num_vote_down', 'vote_score']
 
-
-class RegisterForm(forms.Form):
-    first_name = forms.CharField(label="Imię", max_length=32)
-    last_name = forms.CharField(label="Nazwisko", max_length=64)
-    username = forms.CharField(label="Email", max_length=64)
+class RegisterUserForm(forms.Form):
+    first_name = forms.CharField(label="Imię", max_length=30)
+    last_name = forms.CharField(label="Nazwisko", max_length=40)
+    email = forms.EmailField(label="Email", max_length=64)
     password = forms.CharField(widget=forms.PasswordInput(), label="Hasło", max_length=10)
-    password2 = forms.CharField(widget=forms.PasswordInput(), label="Powtórz hasło", max_length=10)
+    password_again = forms.CharField(widget=forms.PasswordInput(), label="Powtórz hasło", max_length=10)
+    log_on = forms.BooleanField(label="Logowanie po rejestracji:",required=False)
 
 class LoginForm(forms.Form):
-    username = forms.CharField(max_length=30)
+    email = forms.CharField(max_length=30)
     password = forms.CharField(widget=forms.PasswordInput(), label="Hasło", max_length=10)
 
 class AddDonationForm(forms.Form):

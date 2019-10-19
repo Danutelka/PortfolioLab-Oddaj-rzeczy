@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}profil{% endblock %}
+
+{% block content %}
+{% include "header.html" %}
+
+    {% if request.user.is_authenticated %}
+    <h2>Email: {{ request.user.email }}</h2>
+    <h1>Imię: {{ request.user.first_name}}</h1>
+    <h1>Nazwisko: {{ request.user.last_name}}</h1>
+    <h2>Przekazane dary:</h2>
+        {% if dary is not None %}
+            {% if dary.count > 0 %}
+                <h1><ul>
+                {% for s in dary %}
+                    <li>Ilość przekazanych worków: {{ s.quantity }}</li>
+                    <li>Przekazano organizacji: {{ s.institution }}</li>
+                    <li>Kategoria: {{ s.categories }}</li>
+                    <li>Kiedy zostały/zostaną odebrane: {{ s.pick_up_date }}</li>
+                {% endfor %}
+                </ul></h1>
+            {% else %}
+                <p> Nie przekazałeś dotąd żadnych darów</p>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+{% endblock %}

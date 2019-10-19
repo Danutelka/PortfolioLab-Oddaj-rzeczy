@@ -8,8 +8,10 @@
 
     {% if request.user.is_authenticated %}
     <h2>Email: {{ request.user.email }}</h2>
-    <h1>Imię: {{ request.user.first_name}}</h1>
-    <h1>Nazwisko: {{ request.user.last_name}}</h1>
+    <h1><ul>
+        <li>Imię: {{ request.user.first_name}}</li>
+        <li>Nazwisko: {{ request.user.last_name}}</li>
+    </ul><h1>
     <h2>Przekazane dary:</h2>
         {% if dary is not None %}
             {% if dary.count > 0 %}
@@ -25,5 +27,6 @@
                 <p> Nie przekazałeś dotąd żadnych darów</p>
             {% endif %}
         {% endif %}
+    <hr/>
     {% endif %}
 {% endblock %}

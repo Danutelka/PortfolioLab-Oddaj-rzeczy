@@ -4,9 +4,9 @@
 {% block title %}login{% endblock %}
 
 {% block content %} 
-{% include "header2.html" %}
+{% include "header.html" %}
 
-  <section class="login-page">
+  <section id="login" class="login-page">
       <h2>Zaloguj się</h2>
       <form method='POST'>
         <div class="form-group">
@@ -18,7 +18,7 @@
         </div>
 
         <div class="form-group form-group--buttons">
-          <a href="{% url 'register' %}" class="btn btn--without-border">Załóż konto</a>      
+          <a href="{% url 'register' %}#register" class="btn btn--without-border">Załóż konto</a>      
           <button class="btn" type="submit">Zaloguj się</button> 
         </div>
       </form>

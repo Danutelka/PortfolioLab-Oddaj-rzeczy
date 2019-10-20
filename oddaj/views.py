@@ -1,5 +1,4 @@
-from django.shortcuts import render
-from django.shortcuts import redirect
+from django.shortcuts import render, redirect
 from django.template.response import TemplateResponse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views import View
@@ -22,15 +21,7 @@ from .forms import LoginForm, AddDonationForm, RegisterUserForm
 # Create your views here.
 class BaseView(View):
     def get(self, request):
-        fundacje = Institution.objects.filter(typ="fundacja")
-        organizacje = Institution.objects.filter(typ="organizacja pozarządowa")
-        zbiorki = Institution.objects.filter(typ="zbiórka lokalna")
-        ctx = {
-            "fundacje" : fundacje,
-            "organizacje": organizacje,
-            "zbiorki": zbiorki,
-        }
-        return TemplateResponse(request, 'base.html', ctx)
+        return TemplateResponse(request, 'base.html')
 
 class IndexView(View):
     def get(self, request):
@@ -94,14 +85,14 @@ class RegisterUserView(View):
             email = form.cleaned_data['email']
             if not User.objects.filter(username=username).exists():
                 if password == password_again:
-                    u = User.objects.create_user(username, password, email, first_name=first_name, last_name=last_name)
+                    u = User.objects.create_user(username, email, password, first_name=first_name, last_name=last_name)
                     u.save()
                     return HttpResponseRedirect("index")
                 else:
                     error.append('Hasła są różne')
             else:
                 error.append('użytkownik isnieje')
-        return render(request, 'register.html', context={'form':form, 'error':error})
+        return render(request, 'register.html#register', context={'form':form, 'error':error})
 
 class LoginView(View):
     def get(self, request):

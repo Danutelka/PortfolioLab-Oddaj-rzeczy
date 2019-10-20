@@ -5,13 +5,15 @@
 
 {% block content %}
 {% include "header.html" %}
-
     {% if request.user.is_authenticated %}
+    <section id="profile_name">
     <h2>Email: {{ request.user.email }}</h2>
     <h1><ul>
         <li>Imię: {{ request.user.first_name}}</li>
         <li>Nazwisko: {{ request.user.last_name}}</li>
     </ul><h1>
+    </section>
+    <section id="profile_dary">
     <h2>Przekazane dary:</h2>
         {% if dary is not None %}
             {% if dary.count > 0 %}
@@ -19,7 +21,9 @@
                 {% for s in dary %}
                     <li>Ilość przekazanych worków: {{ s.quantity }}</li>
                     <li>Przekazano organizacji: {{ s.institution }}</li>
-                    <li>Kategoria: {{ s.categories }}</li>
+                    {% for category in s.categories.all %}
+                    <li>Kategoria: {{ category }}</li>
+                    {% endfor %}
                     <li>Kiedy zostały/zostaną odebrane: {{ s.pick_up_date }}</li>
                 {% endfor %}
                 </ul></h1>
@@ -27,6 +31,6 @@
                 <p> Nie przekazałeś dotąd żadnych darów</p>
             {% endif %}
         {% endif %}
-    <hr/>
+    </section>
     {% endif %}
 {% endblock %}

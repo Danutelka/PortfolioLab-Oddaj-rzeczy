@@ -15,8 +15,11 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Avg, Max, Min, Sum
 from django.db.models import Count
+from django.core.paginator import Paginator
+from django.core.mail import send_mail
 from .models import Category, Institution, Donation, TYP
-from .forms import LoginForm, AddDonationForm, RegisterUserForm
+from .forms import LoginForm, AddDonationForm, RegisterUserForm, PasswordForm, UserEditForm,  \
+    ResetPasswordForm
 
 # Create your views here.
 class BaseView(View):
@@ -28,8 +31,15 @@ class IndexView(View):
         worki = list(Donation.objects.all().aggregate(Sum('quantity')).values())[0]
         wszystkie = Institution.objects.count()
         fundacje = Institution.objects.filter(typ="fundacja")
+        paginator = Paginator(fundacje, 3)
         organizacje = Institution.objects.filter(typ="organizacja pozarządowa")
+        pag2 = Paginator(organizacje, 3)
         zbiorki = Institution.objects.filter(typ="zbiórka lokalna")
+        pag3 = Paginator(zbiorki, 3)
+        page = request.GET.get('page')
+        fundacje = paginator.get_page(page)
+        organizacje = pag2.get_page(page)
+        zbiorki = pag3.get_page(page)
         ctx = {
             "worki": worki,
             "wszystkie":wszystkie,
@@ -87,12 +97,16 @@ class RegisterUserView(View):
                 if password == password_again:
                     u = User.objects.create_user(username, email, password, first_name=first_name, last_name=last_name)
                     u.save()
-                    return HttpResponseRedirect("index")
+                    return HttpResponseRedirect("regconf")
                 else:
                     error.append('Hasła są różne')
             else:
                 error.append('użytkownik isnieje')
-        return render(request, 'register.html#register', context={'form':form, 'error':error})
+        return render(request, 'register.html', context={'form':form, 'error':error})
+
+class RegisterConfView(View):
+    def get(self, request):
+        return TemplateResponse(request, 'register-confirmation.html')
 
 class LoginView(View):
     def get(self, request):
@@ -125,4 +139,75 @@ class ProfileView(View):
             "dary": dary
             }
         return TemplateResponse(request, 'profile.html', context=context)
+
+class PasswordView(View):
+    def get(self, request, pk):
+        form = PasswordForm()
+        user = User.objects.get(id=pk)
+        context = {
+            "form": form,
+            "user": user
+            }
+        return TemplateResponse(request, 'password.html', context=context)
+    def post(self, request, pk):
+        user = User.objects.get(id=pk)
+        form = PasswordForm(request.POST)
+        if form.is_valid():
+            password = form.cleaned_data['password']
+            if user.password == password:
+                form.save()
+                return HttpResponseRedirect("/edit-profile")
+            else:
+                return HttpResponseRedirect("/password")
+        return render (request, 'password.html', context={'form':form, "user": user})
+
+class EditProfileView(View):
+    def get(self, request, pk):
+        us = User.objects.get(id=pk)
+        context = {
+            "us": us
+        }
+        return TemplateResponse(request, 'edit-profile.html', context=context)
+
+class ChangeNameView(View):
+    def get(self, request, pk):
+        form = UserEditForm()
+        us = User.objects.get(id=pk)
+        context = {
+            "us": us,
+            "form": form
+        }
+        return TemplateResponse(request, 'change-name.html', context=context)
+    def post(self, request, pk):
+        form = UserEditForm(request.POST)
+        us = User.objects.get(id=pk)
+        if form.is_valid():
+            us.first_name = form.cleaned_data['first_name']
+            us.last_name = form.cleaned_data['last_name']
+            us.save()
+            return HttpResponseRedirect("/index")
+        else:
+            return HttpResponse("coś poszło nie tak...")
+        return render (request, 'change-name.html', context={'form':form, "us": us})
+
+class ResetPasswordView(View):
+    def get(self, request, pk):
+        form = ResetPasswordForm()
+        us = User.objects.get(id=pk)
+        return render(request, 'reset_password.html', context={'form': form, 'us': us})
+    def post(self, request, pk):
+        form = ResetPasswordForm(request.POST)
+        us = User.objects.get(id=pk)
+        if form.is_valid():
+            us.new_password = form.cleaned_data['new_password']
+            us.new2_password = form.cleaned_data['new2_password']
+            us.new3_password = form.cleaned_data['new3_password']
+            if us.new_password == us.new2_password and us.new_password == us.new3_password:
+                us.set_password(request.POST.get('new_password'))
+                us.save()
+            else:
+                return HttpResponse("wszystkie hasła muszą być jednakowe")
+        return HttpResponseRedirect('/profile/<int:pk>') # użyć reverse
+
+
 

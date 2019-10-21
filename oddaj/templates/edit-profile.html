@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}edit|profil{% endblock %}
+
+{% block content %}
+{% include "header.html" %}
+    {% if request.user.is_authenticated %}
+    <section id="profile_name">
+    <h2>Email: {{ request.user.email }}</h2>
+    <p>Wybierz co chcesz edytować</p>
+    <a href="{% url 'change-name' user.id %}#profile_name" class="btn btn--without-border">Zmień dane</a>  
+    <a href="{% url 'change-pass' user.id %}#change_password" class="btn btn--without-border">Zmień hasło</a>  
+    </section>
+    {% endif %}
+{% endblock %}

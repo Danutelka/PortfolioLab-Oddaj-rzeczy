@@ -17,7 +17,8 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls.static import static
 from oddaj.views import IndexView, FormConfView, FormView, LoginView, LogoutView, BaseView,  \
-    RegisterUserView, ProfileView
+    RegisterUserView, ProfileView, RegisterConfView, PasswordView, EditProfileView, ChangeNameView,  \
+    ResetPasswordView
 
 urlpatterns = [
     path('admin/', admin.site.urls, name="admin"),
@@ -27,6 +28,12 @@ urlpatterns = [
     path('form', FormView.as_view(), name="form"),
     path('login', LoginView.as_view(), name="login"),
     path('register', RegisterUserView.as_view(), name="register"),
+    path('regconf', RegisterConfView.as_view(), name="reg-conf"),
     path('logout', LogoutView.as_view(), name="userlogout"),
-    path('profile/<int:pk>', ProfileView.as_view(), name="profil")
+    path('profile/<int:pk>', ProfileView.as_view(), name="profil"),
+    path('pass/<int:pk>', PasswordView.as_view(), name="password"),
+    path('editprofile/<int:pk>', EditProfileView.as_view(), name="edit-profile"),
+    path('changename/<int:pk>', ChangeNameView.as_view(), name="change-name"),
+    path('changepass/<int:pk>', ResetPasswordView.as_view(), name="change-pass")
+
 ]

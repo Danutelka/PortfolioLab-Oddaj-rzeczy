@@ -33,4 +33,18 @@ class AddDonationForm(forms.Form):
     pick_up_comment = forms.CharField(max_length=250)
     user = forms.CharField(widget=forms.HiddenInput, max_length=64)
 
+class PasswordForm(forms.Form):
+    password = forms.CharField(widget=forms.PasswordInput(), label="Hasło", max_length=10)
+
+class UserEditForm(forms.Form):
+    first_name = forms.CharField(label="Nowe imię", max_length=30, required=False)
+    last_name = forms.CharField(label="Nowe nazwisko", max_length=40, required=False)
+
+class ResetPasswordForm(forms.Form):
+    new_password = forms.CharField(widget=forms.PasswordInput(), label="wprowadź nowe hasło")
+    new2_password = forms.CharField(widget=forms.PasswordInput(), label="powtórz nowe hasło")
+    new3_password = forms.CharField(widget=forms.PasswordInput(), label="ponownie powtórz nowe hasło")
+
+
+
 

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}change|name{% endblock %}
+
+{% block content %}
+{% include "header.html" %}
+    {% if request.user.is_authenticated %}
+    <section id="profile_name">
+    <h2>Email: {{ request.user.email }}</h2>
+    <h1><ul>
+        <li>Imię: {{ request.user.first_name}}</li>
+        <li>Nazwisko: {{ request.user.last_name}}</li>
+    </ul><h1>
+
+    <form method='POST'>
+        <div class="form-group">
+        {% csrf_token %}
+        {{ form.as_p }}
+        </div>
+        <div class="form-group form-group--buttons">      
+          <button class="btn" type="submit">Zmień dane</button> 
+        </div>
+      </form>
+    </section>
+    {% endif %}
+{% endblock %}

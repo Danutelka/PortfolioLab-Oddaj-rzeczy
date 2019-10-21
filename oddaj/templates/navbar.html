@@ -7,6 +7,7 @@
                     <ul class="dropdown">
                         <li><a href="{% url 'profil' user.id %}#profile_name">Profil</a></li>
                         <li><a href="{% url 'profil' user.id %}#profile_dary">Moje zbiórki</a></li>
+                        <li><a href="{% url 'password' user.id %}#password">Ustawienia</a></li>
                         {% if request.user.is_superuser %}
                             <li><a href="admin/">Panel administracyjny</a></li>
                         {% endif %}

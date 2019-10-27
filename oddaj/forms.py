@@ -22,7 +22,7 @@ class LoginForm(forms.Form):
 
 class AddDonationForm(forms.Form):
     categories = forms.ModelChoiceField(queryset=Category.objects.all())
-    quantity = forms.IntegerField()
+    quantity = forms.IntegerField(min_value=0, max_value=100)
     institution = forms.ModelChoiceField(queryset=Institution.objects.all())
     adress = forms.CharField(max_length=250)
     city = forms.CharField(max_length=60)
@@ -30,7 +30,7 @@ class AddDonationForm(forms.Form):
     phone_number = forms.CharField(max_length=11)
     pick_up_date = forms.DateField()
     pick_up_time = forms.TimeField()
-    pick_up_comment = forms.CharField(max_length=250)
+    pick_up_comment = forms.CharField(widget=forms.Textarea, max_length=400)
     user = forms.CharField(widget=forms.HiddenInput, max_length=64)
 
 class PasswordForm(forms.Form):
@@ -45,6 +45,10 @@ class ResetPasswordForm(forms.Form):
     new2_password = forms.CharField(widget=forms.PasswordInput(), label="powtórz nowe hasło")
     new3_password = forms.CharField(widget=forms.PasswordInput(), label="ponownie powtórz nowe hasło")
 
+class ContactForm(forms.Form):
+    name = forms.CharField(max_length=64, label="Imię i nazwisko")
+    email = forms.EmailField(label="Email", max_length=64)
+    tekst = forms.CharField(widget=forms.Textarea, max_length=500, label="Wpisz treść wiadomości")
 
 
 

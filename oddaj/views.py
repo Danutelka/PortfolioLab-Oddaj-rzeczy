@@ -16,10 +16,10 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Avg, Max, Min, Sum
 from django.db.models import Count
 from django.core.paginator import Paginator
-from django.core.mail import send_mail
+from django.core.mail import send_mail, mail_admins
 from .models import Category, Institution, Donation, TYP
 from .forms import LoginForm, AddDonationForm, RegisterUserForm, PasswordForm, UserEditForm,  \
-    ResetPasswordForm
+    ResetPasswordForm, ContactForm
 
 # Create your views here.
 class BaseView(View):
@@ -55,9 +55,11 @@ class FormConfView(View):
 
 class FormView(View):
     def get(self, request):
+        #cat = Category.objects.all()
         form = AddDonationForm()
         return TemplateResponse(request, 'add-donation.html', context={'form':form})
     def post(self, reguest):
+        #cat = Category.objects.all()
         form = AddDonationForm(request.POST)
         if form.is_valid():
             categories = form.cleaned_data['categories']
@@ -70,12 +72,12 @@ class FormView(View):
             pick_up_date = form.cleaned_data['pick_up_date']
             pick_up_time = form.cleaned_data['pick_up_time']
             pick_up_comment = form.cleaned_data['pick_up_comment']
-            z = Donation.objects.create(categories=categories, quantity=quantity,  \
+            Donation.objects.create(categories=categories, quantity=quantity,  \
                 institution=institution, adress=adress, city=city, zip_code=zip_code,  \
                 phone_number=phone_number, pick_up_date=pick_up_date,  \
                 pick_up_time=pick_up_time, pick_up_comment=pick_up_comment)
-            z.save()
-            return HttpResponse("OK")
+            form.save()
+            return render(request, 'form-confirmation.html')
         else:
             return TemplateResponse(request, 'add-donation.html', context={'form':form})
 
@@ -209,5 +211,30 @@ class ResetPasswordView(View):
                 return HttpResponse("wszystkie hasła muszą być jednakowe")
         return HttpResponseRedirect('/profile/<int:pk>') # użyć reverse
 
+class TestView(View):
+    def get(self, request):
+        form = AddDonationForm()
+        return TemplateResponse(request, 'test.html', context={'form':form})
+    def post(self, request):
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            quantity = form.cleaned_data['quantity']
+        return render (request, 'login.html', context={'form':form})
 
-
+class ContactView(View):
+    def get(self, request):
+        form2 = ContactForm()
+        return TemplateResponse(request, 'footer.html', context={'form2': form2})
+    def post(self, request):
+        form2 = ContactForm(request.POST)
+        if form2.is_valid():
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            tekst = form.cleaned_data['tekst']
+            # send email code goes here
+            message = "{} {} wysłał/a wiadomość o treści {}".format(name, email, tekst)
+            mail_admins('Kontakt', message)
+            return render(request, 'contact-answer.html')
+        else:
+            return TemplateResponse(request, 'contact.html', context={'form': form})
+        #return TemplateResponse(request, 'contact', {'form': form} 

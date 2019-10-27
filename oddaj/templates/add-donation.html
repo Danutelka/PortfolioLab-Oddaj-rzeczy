@@ -4,7 +4,7 @@
 {% block title %}form{% endblock %}
 
 {% block content %}
-{% include "header.html" %}
+{% include "header2.html" %}
 
     <section class="form--steps">
       <div class="form--steps-instructions">
@@ -29,26 +29,29 @@
       <div class="form--steps-container">
         <div class="form--steps-counter">Krok <span>1</span>/5</div>
 
-        <form action="form-confirmation.html" method="post">
-          <!-- STEP 1: class .active is switching steps -->
+        <form action="form-confirmation.html" method='POST'>
+
+<!-- STEP 1: class .active is switching steps -->
           <div data-step="1" class="active">
             <h3>Zaznacz co chcesz oddać:</h3>
-
-            <div class="form-group form-group--checkbox">
-              <label>
-                <input
-                  type="checkbox"
+            <div id="kat" class="form-group form-group--checkbox">
+            {% csrf_token %}
+            {{ form.categories }}
+              <label> Wybierz kategorie
+                {% comment %} <input 
+                type="checkbox"
                   name="categories"
-                  value="clothes-to-use"
-                />
-                <span class="checkbox"></span>
+                  value="{{ x.id }}"
+                /> {% endcomment %}
+                <span class="radio"></span>
+                {% for category in categories %}
                 <span class="description"
-                  >ubrania, które nadają się do ponownego użycia</span
-                >
+                  > {{ category.name}}</span>
+                {% endfor %}
               </label>
             </div>
-
-            <div class="form-group form-group--checkbox">
+<!---->
+            {% comment %} <div class="form-group form-group--checkbox">
               <label>
                 <input
                   type="checkbox"
@@ -82,21 +85,23 @@
                 <span class="checkbox"></span>
                 <span class="description">inne</span>
               </label>
-            </div>
+            </div> {% endcomment %}
 
             <div class="form-group form-group--buttons">
               <button type="button" class="btn next-step">Dalej</button>
             </div>
           </div>
 <!---->
-          <!-- STEP 2 -->
+<!-- STEP 2 -->
           <div data-step="2">
             <h3>Podaj liczbę 60l worków, w które spakowałeś/aś rzeczy:</h3>
 
-            <div class="form-group form-group--inline">
+            <div id="ilosc" class="form-group form-group--inline">
               <label>
                 Liczba 60l worków:
-                <input type="number" name="bags" step="1" min="1" />
+                {% csrf_token %}
+                <input type="wory"/>{{ form.quantity }}
+                {% comment %} <input type="number" name="bags" step="1" min="1" /> {% endcomment %}
               </label>
             </div>
 
@@ -106,24 +111,26 @@
             </div>
           </div>
 
-          <!-- STEP 4 -->
+<!-- STEP 3 -->
           <div data-step="3">
             <h3>Wybierz organizacje, której chcesz pomóc:</h3>
 
-            <div class="form-group form-group--checkbox">
+            <div id="org" class="form-group form-group--checkbox">
               <label>
-                <input type="radio" name="organization" value="old" />
+                {% csrf_token %}
+                {{ form.institution }}
+                {% comment %} <input type="radio" name="organization" value="old" /> {% endcomment %}
+                
                 <span class="checkbox radio"></span>
+                {% for inst in institution %}
                 <span class="description">
-                  <div class="title">Fundacja “Bez domu”</div>
-                  <div class="subtitle">
-                    Cel i misja: Pomoc dla osób nie posiadających miejsca
-                    zamieszkania
-                  </div>
+                  <div class="title">{{ inst.name }}</div>
+                  <div class="subtitle">{{ inst.description }}</div>
                 </span>
+                {% endfor %}
               </label>
             </div>
-
+{% comment %} 
             <div class="form-group form-group--checkbox">
               <label>
                 <input type="radio" name="organization" value="old" />
@@ -136,7 +143,7 @@
                   </div>
                 </span>
               </label>
-            </div>
+            </div> {% endcomment %}
 
             <div class="form-group form-group--buttons">
               <button type="button" class="btn prev-step">Wstecz</button>
@@ -144,59 +151,83 @@
             </div>
           </div>
 
-          <!-- STEP 5 -->
+<!-- STEP 4 -->
           <div data-step="4">
             <h3>Podaj adres oraz termin odbioru rzecz przez kuriera:</h3>
 
             <div class="form-section form-section--columns">
               <div class="form-section--column">
                 <h4>Adres odbioru</h4>
-                <div class="form-group form-group--inline">
-                  <label> Ulica <input type="text" name="address" /> </label>
-                </div>
-
-                <div class="form-group form-group--inline">
-                  <label> Miasto <input type="text" name="city" /> </label>
-                </div>
-
-                <div class="form-group form-group--inline">
-                  <label>
-                    Kod pocztowy <input type="text" name="postcode" />
+                <div id="adres" class="form-group form-group--inline">
+                  <label> Adres 
+                  {% csrf_token %}
+                  {{ form.adress }}
+                  {% comment %} <input type="text" name="address" />  {% endcomment %}
                   </label>
                 </div>
 
-                <div class="form-group form-group--inline">
+                <div id="miasto" class="form-group form-group--inline">
+                  <label> Miasto 
+                  {% csrf_token %}
+                  {{ form.city }}
+                  {% comment %} <input type="text" name="city" />  {% endcomment %}
+                  </label>
+                </div>
+
+                <div id="kod" class="form-group form-group--inline">
                   <label>
-                    Numer telefonu <input type="phone" name="phone" />
+                    Kod pocztowy 
+                    {% csrf_token %}
+                    {{ form.zip_code }}
+                    {% comment %} <input type="text" name="postcode" /> {% endcomment %}
+                  </label>
+                </div>
+
+                <div id="tel" class="form-group form-group--inline">
+                  <label>
+                    Numer telefonu 
+                    {% csrf_token %}
+                    {{ form.phone_number }}
+                    {% comment %} <input type="phone" name="phone" /> {% endcomment %}
                   </label>
                 </div>
               </div>
 
               <div class="form-section--column">
                 <h4>Termin odbioru</h4>
-                <div class="form-group form-group--inline">
-                  <label> Data <input type="date" name="data" /> </label>
+                <div id="data" class="form-group form-group--inline">
+                  <label> Data 
+                    {% csrf_token %}
+                    {{ form.pick_up_date }}
+                  {% comment %} <input type="date" name="data" /> {% endcomment %}
+                  </label>
                 </div>
 
-                <div class="form-group form-group--inline">
-                  <label> Godzina <input type="time" name="time" /> </label>
+                <div id="godz" class="form-group form-group--inline">
+                  <label> Godzina 
+                    {% csrf_token %}
+                    {{ form.pick_up_time }}
+                  {% comment %} <input type="time" name="time" />  {% endcomment %}
+                  </label>
                 </div>
 
-                <div class="form-group form-group--inline">
+                <div id="uwagi" class="form-group form-group--inline">
                   <label>
                     Uwagi dla kuriera
-                    <textarea name="more_info" rows="5"></textarea>
+                    {% csrf_token %}
+                    {{ form.pick_up_comment }}
+                    {% comment %} <textarea name="more_info" rows="5"></textarea> {% endcomment %}
                   </label>
                 </div>
               </div>
             </div>
             <div class="form-group form-group--buttons">
               <button type="button" class="btn prev-step">Wstecz</button>
-              <button type="button" class="btn next-step">Dalej</button>
+              <button id="gotowe" type="button" class="btn next-step">Dalej</button>
             </div>
           </div>
 
-          <!-- STEP 6 -->
+<!-- STEP 5 -->
           <div data-step="5">
             <h3>Podsumowanie Twojej darowizny</h3>
 

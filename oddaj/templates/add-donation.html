@@ -6,6 +6,31 @@
 {% block content %}
 {% include "header2.html" %}
 
+<script>
+function summaryMoje() {
+        var kategoria = document.getElementById("id_categories").value;
+        var ilosc = document.getElementById("id_quantity").value;
+        var instytucja = document.getElementById("id_institution").value;
+        var adres = document.getElementById("id_adress").value;
+        var miasto = document.getElementById("id_city").value;
+        var kod = document.getElementById("id_zip_code").value;
+        var telefon = document.getElementById("id_phone_number").value;
+        var data_odbior = document.getElementById("id_pick_up_date").value;
+        var czas_odbior = document.getElementById("id_pick_up_time").value;
+        var komentarz = document.getElementById("id_pick_up_comment").value;
+
+        document.getElementById('worki').innerHTML = ilosc+" worki";
+        document.getElementById('dla-kogo').innerHTML = "Dla "+instytucja;
+        document.getElementById('sum_adres').innerHTML = adres;
+        document.getElementById('sum_miasto').innerHTML = miasto;
+        document.getElementById('sum_kod').innerHTML = kod;
+        document.getElementById('sum_tel').innerHTML = telefon;
+        document.getElementById('data-odbioru').innerHTML = data_odbior;
+        document.getElementById('czas-odbioru').innerHTML = czas_odbior;
+        document.getElementById('uwagi').innerHTML = komentarz;
+      }
+</script>
+
     <section class="form--steps">
       <div class="form--steps-instructions">
         <div class="form--steps-container">
@@ -29,12 +54,12 @@
       <div class="form--steps-container">
         <div class="form--steps-counter">Krok <span>1</span>/5</div>
 
-        <form action="/formconf" method='POST'>
+        <form action="form-confirmation.html" method="POST">
 
 <!-- STEP 1: class .active is switching steps -->
           <div data-step="1" class="active">
             <h3>Zaznacz co chcesz oddać:</h3>
-            <div id="kat" class="form-group form-group--checkbox">
+            <div class="form-group form-group--checkbox">
             {% csrf_token %}
             {{ form.categories }}
               <label> Wybierz kategorie
@@ -96,7 +121,7 @@
           <div data-step="2">
             <h3>Podaj liczbę 60l worków, w które spakowałeś/aś rzeczy:</h3>
 
-            <div id="ilosc" class="form-group form-group--inline">
+            <div class="form-group form-group--inline">
               <label>
                 Liczba 60l worków:
                 {% csrf_token %}
@@ -115,8 +140,8 @@
           <div data-step="3">
             <h3>Wybierz organizacje, której chcesz pomóc:</h3>
 
-            <div id="org" class="form-group form-group--checkbox">
-              <label>
+            <div class="form-group form-group--checkbox">
+              <label>Wybierz organizacje
                 {% csrf_token %}
                 {{ form.institution }}
                 {% comment %} <input type="radio" name="organization" value="old" /> {% endcomment %}
@@ -158,7 +183,7 @@
             <div class="form-section form-section--columns">
               <div class="form-section--column">
                 <h4>Adres odbioru</h4>
-                <div id="adres" class="form-group form-group--inline">
+                <div class="form-group form-group--inline">
                   <label> Adres 
                   {% csrf_token %}
                   {{ form.adress }}
@@ -166,7 +191,7 @@
                   </label>
                 </div>
 
-                <div id="miasto" class="form-group form-group--inline">
+                <div class="form-group form-group--inline">
                   <label> Miasto 
                   {% csrf_token %}
                   {{ form.city }}
@@ -174,7 +199,7 @@
                   </label>
                 </div>
 
-                <div id="kod" class="form-group form-group--inline">
+                <div class="form-group form-group--inline">
                   <label>
                     Kod pocztowy 
                     {% csrf_token %}
@@ -183,7 +208,7 @@
                   </label>
                 </div>
 
-                <div id="tel" class="form-group form-group--inline">
+                <div class="form-group form-group--inline">
                   <label>
                     Numer telefonu 
                     {% csrf_token %}
@@ -195,7 +220,7 @@
 
               <div class="form-section--column">
                 <h4>Termin odbioru</h4>
-                <div id="data" class="form-group form-group--inline">
+                <div class="form-group form-group--inline">
                   <label> Data 
                     {% csrf_token %}
                     {{ form.pick_up_date }}
@@ -203,7 +228,7 @@
                   </label>
                 </div>
 
-                <div id="godz" class="form-group form-group--inline">
+                <div class="form-group form-group--inline">
                   <label> Godzina 
                     {% csrf_token %}
                     {{ form.pick_up_time }}
@@ -211,7 +236,7 @@
                   </label>
                 </div>
 
-                <div id="uwagi" class="form-group form-group--inline">
+                <div class="form-group form-group--inline">
                   <label>
                     Uwagi dla kuriera
                     {% csrf_token %}
@@ -228,9 +253,60 @@
           </div>
 <!-- STEP 5 -->
 
-          <div data-step="5">
+          {% comment %} <div data-step="5">
             <h3>Podsumowanie Twojej darowizny</h3>
             <!--<script src="static/js/form.js"></script>-->
+         <!-- STEP 6 --> {% endcomment %}
+          <div data-step="5">
+            <h3>Podsumowanie Twojej darowizny</h3>
+
+            <div class="summary">
+              <div class="form-section">
+                <h4>Oddajesz:</h4>
+                <ul>
+                  <li>
+                    <span class="icon icon-bag"></span>
+                    <span class="summary--text">
+                      <div id="worki">
+
+                      <div>
+                    </span>
+                    
+                  </li>
+
+                  <li>
+                    <span class="icon icon-hand"></span>
+                    <span class="summary--text">
+                     <div id="dla-kogo">
+
+                     </div>
+                     </span>
+                    
+                  </li>
+                </ul>
+              </div>
+
+              <div class="form-section form-section--columns">
+                <div class="form-section--column">
+                  <h4>Adres odbioru:</h4>
+                  <ul>
+                    <li id="sum_adres"></li>
+                    <li id="sum_miasto"></li>
+                    <li id="sum_kod"></li>
+                    <li id="sum_tel"></li>
+                  </ul>
+                </div>
+
+                <div class="form-section--column">
+                  <h4>Termin odbioru:</h4>
+                  <ul>
+                    <li id="data-odbioru"></li>
+                    <li id="czas-odbioru"></li>
+                    <li id="uwagi"></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
 
 
 {% comment %} 

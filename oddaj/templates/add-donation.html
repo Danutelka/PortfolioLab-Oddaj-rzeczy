@@ -29,7 +29,7 @@
       <div class="form--steps-container">
         <div class="form--steps-counter">Krok <span>1</span>/5</div>
 
-        <form action="form-confirmation.html" method='POST'>
+        <form action="/formconf" method='POST'>
 
 <!-- STEP 1: class .active is switching steps -->
           <div data-step="1" class="active">
@@ -100,7 +100,7 @@
               <label>
                 Liczba 60l worków:
                 {% csrf_token %}
-                <input type="wory"/>{{ form.quantity }}
+                {{ form.quantity }}
                 {% comment %} <input type="number" name="bags" step="1" min="1" /> {% endcomment %}
               </label>
             </div>
@@ -121,7 +121,7 @@
                 {{ form.institution }}
                 {% comment %} <input type="radio" name="organization" value="old" /> {% endcomment %}
                 
-                <span class="checkbox radio"></span>
+                <span class="radio"></span>
                 {% for inst in institution %}
                 <span class="description">
                   <div class="title">{{ inst.name }}</div>
@@ -226,8 +226,14 @@
               <button id="gotowe" type="button" class="btn next-step">Dalej</button>
             </div>
           </div>
-
 <!-- STEP 5 -->
+
+          <div data-step="5">
+            <h3>Podsumowanie Twojej darowizny</h3>
+            <!--<script src="static/js/form.js"></script>-->
+
+
+{% comment %} 
           <div data-step="5">
             <h3>Podsumowanie Twojej darowizny</h3>
 
@@ -237,16 +243,26 @@
                 <ul>
                   <li>
                     <span class="icon icon-bag"></span>
-                    <span class="summary--text"
-                      >4 worki ubrań w dobrym stanie dla dzieci</span
-                    >
+                    <span class="summary--text"> 
+                      {% comment %} <script type="text/javascript">
+                        document.querySelector("#ilosc").addEventListener('input', function(event){
+                          event.preventDefault();
+                          document.write(ilosc.value);
+                        });
+                      </script> 
+                      </span>
                   </li>
 
                   <li>
                     <span class="icon icon-hand"></span>
-                    <span class="summary--text"
-                      >Dla fundacji "Mam marzenie" w Warszawie</span
-                    >
+                    <span class="summary--text">
+                      {% comment %} <script type="text/javascript">
+                        document.querySelector("#kat").addEventListener('input', function(event){
+                          event.preventDefault();
+                          document.write(org.checked);
+                        });
+                      </script> 
+                    </span>
                   </li>
                 </ul>
               </div>
@@ -255,7 +271,8 @@
                 <div class="form-section--column">
                   <h4>Adres odbioru:</h4>
                   <ul>
-                    <li>Prosta 51</li>
+                    <li>
+                    Prosta 51</li>
                     <li>Warszawa</li>
                     <li>99-098</li>
                     <li>123 456 789</li>
@@ -272,7 +289,7 @@
                 </div>
               </div>
             </div>
-
+<!----> {% endcomment %}
             <div class="form-group form-group--buttons">
               <button type="button" class="btn prev-step">Wstecz</button>
               <button type="submit" class="btn">Potwierdzam</button>

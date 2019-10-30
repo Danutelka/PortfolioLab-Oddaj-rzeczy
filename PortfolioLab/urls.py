@@ -16,15 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
 from oddaj.views import IndexView, FormConfView, FormView, LoginView, LogoutView, BaseView,  \
     RegisterUserView, ProfileView, RegisterConfView, PasswordView, EditProfileView, ChangeNameView,  \
-    ResetPasswordView, TestView
+    ResetPasswordView, ContactConfView, TestView
 
 urlpatterns = [
     path('admin/', admin.site.urls, name="admin"),
     path('', BaseView.as_view(), name="base"),
     path('index', IndexView.as_view(), name="index"),
-    path('test', TestView.as_view(), name="test"),
     path('formconf', FormConfView.as_view(), name="form-conf"),
     path('form', FormView.as_view(), name="form"),
     path('login', LoginView.as_view(), name="login"),
@@ -35,6 +35,8 @@ urlpatterns = [
     path('pass/<int:pk>', PasswordView.as_view(), name="password"),
     path('editprofile/<int:pk>', EditProfileView.as_view(), name="edit-profile"),
     path('changename/<int:pk>', ChangeNameView.as_view(), name="change-name"),
-    path('changepass/<int:pk>', ResetPasswordView.as_view(), name="change-pass")
+    path('changepass/<int:pk>', ResetPasswordView.as_view(), name="change-pass"),
+    path('contact', ContactConfView.as_view(), name="contact"),
+    path('test', TestView.as_view(), name="test")
 
 ]

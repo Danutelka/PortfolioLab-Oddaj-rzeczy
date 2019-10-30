@@ -53,7 +53,9 @@ class FormConfView(View):
     def get(self, request):
         return TemplateResponse(request, 'form-confirmation.html')
 
-class FormView(View):
+#@login_required(login_url='/login')
+class FormView(LoginRequiredMixin, View):
+    login_url = '/login'
     def get(self, request):
         #cat = Category.objects.all()
         form = AddDonationForm()
@@ -72,12 +74,12 @@ class FormView(View):
             pick_up_date = form.cleaned_data['pick_up_date']
             pick_up_time = form.cleaned_data['pick_up_time']
             pick_up_comment = form.cleaned_data['pick_up_comment']
-            Donation.objects.create(categories=categories, quantity=quantity,  \
+            z = Donation.objects.create(categories=categories, quantity=quantity,  \
                 institution=institution, adress=adress, city=city, zip_code=zip_code,  \
                 phone_number=phone_number, pick_up_date=pick_up_date,  \
                 pick_up_time=pick_up_time, pick_up_comment=pick_up_comment)
-            form.save()
-            return render(request, 'form-confirmation.html')
+            z.save()
+            return HttpResponse("ok")
         else:
             return TemplateResponse(request, 'add-donation.html', context={'form':form})
 
@@ -158,9 +160,9 @@ class PasswordView(View):
             password = form.cleaned_data['password']
             if user.password == password:
                 form.save()
-                return HttpResponseRedirect("/edit-profile")
+                return HttpResponseRedirect("/editprofile/<int:pk>")
             else:
-                return HttpResponseRedirect("/password")
+                return HttpResponse("nieprawidłowe hasło")
         return render (request, 'password.html', context={'form':form, "user": user})
 
 class EditProfileView(View):
@@ -186,7 +188,16 @@ class ChangeNameView(View):
         if form.is_valid():
             us.first_name = form.cleaned_data['first_name']
             us.last_name = form.cleaned_data['last_name']
-            us.save()
+            if us.first_name is not None : 
+                us.save()
+            else: 
+                us.first_name = request.user.first_name
+                us.save()
+            if us.last_name is not None:
+                us.save()
+            else:
+                us.last_name = request.user.last_name
+                us.save()
             return HttpResponseRedirect("/index")
         else:
             return HttpResponse("coś poszło nie tak...")
@@ -203,8 +214,7 @@ class ResetPasswordView(View):
         if form.is_valid():
             us.new_password = form.cleaned_data['new_password']
             us.new2_password = form.cleaned_data['new2_password']
-            us.new3_password = form.cleaned_data['new3_password']
-            if us.new_password == us.new2_password and us.new_password == us.new3_password:
+            if us.new_password == us.new2_password:
                 us.set_password(request.POST.get('new_password'))
                 us.save()
             else:
@@ -236,5 +246,9 @@ class ContactView(View):
             mail_admins('Kontakt', message)
             return render(request, 'contact-answer.html')
         else:
-            return TemplateResponse(request, 'contact.html', context={'form': form})
+            return TemplateResponse(request, 'contact.html', context={'form2': form2})
         #return TemplateResponse(request, 'contact', {'form': form} 
+
+class ContactConfView(View):
+    def get(self, request):
+        return render(request, 'contact-answer.html')

@@ -28,7 +28,7 @@ class AddDonationForm(forms.Form):
     city = forms.CharField(max_length=60)
     zip_code = forms.CharField(max_length=6)
     phone_number = forms.CharField(max_length=11)
-    pick_up_date = forms.DateField()
+    pick_up_date = forms.DateField(widget=forms.SelectDateWidget)
     pick_up_time = forms.TimeField()
     pick_up_comment = forms.CharField(widget=forms.Textarea, max_length=400)
     user = forms.CharField(widget=forms.HiddenInput, max_length=64)
@@ -43,7 +43,6 @@ class UserEditForm(forms.Form):
 class ResetPasswordForm(forms.Form):
     new_password = forms.CharField(widget=forms.PasswordInput(), label="wprowadź nowe hasło")
     new2_password = forms.CharField(widget=forms.PasswordInput(), label="powtórz nowe hasło")
-    new3_password = forms.CharField(widget=forms.PasswordInput(), label="ponownie powtórz nowe hasło")
 
 class ContactForm(forms.Form):
     name = forms.CharField(max_length=64, label="Imię i nazwisko")

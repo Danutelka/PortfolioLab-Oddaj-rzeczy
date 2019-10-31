@@ -23,8 +23,10 @@ from oddaj.views import IndexView, FormConfView, FormView, LoginView, LogoutView
 
 urlpatterns = [
     path('admin/', admin.site.urls, name="admin"),
-    path('', BaseView.as_view(), name="base"),
-    path('index', IndexView.as_view(), name="index"),
+    path('', IndexView.as_view(), name="index"),
+    path('index', BaseView.as_view(), name="base"),
+    # path('', BaseView.as_view(), name="base"),
+    # path('index', IndexView.as_view(), name="index"),
     path('formconf', FormConfView.as_view(), name="form-conf"),
     path('form', FormView.as_view(), name="form"),
     path('login', LoginView.as_view(), name="login"),
@@ -37,6 +39,7 @@ urlpatterns = [
     path('changename/<int:pk>', ChangeNameView.as_view(), name="change-name"),
     path('changepass/<int:pk>', ResetPasswordView.as_view(), name="change-pass"),
     path('contact', ContactConfView.as_view(), name="contact"),
-    path('test', TestView.as_view(), name="test")
+    path('test', TestView.as_view(), name="test"),
+    path('dupa', TestView.as_view(), name="test"),
 
 ]

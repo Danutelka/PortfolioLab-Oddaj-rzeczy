@@ -31,8 +31,7 @@ class AddDonationForm(forms.Form):
     pick_up_date = forms.DateField(widget=forms.SelectDateWidget)
     pick_up_time = forms.TimeField()
     pick_up_comment = forms.CharField(widget=forms.Textarea, max_length=400)
-    user = forms.CharField(widget=forms.HiddenInput, max_length=64)
-
+    
 class PasswordForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput(), label="Hasło", max_length=10)
 
@@ -46,8 +45,8 @@ class ResetPasswordForm(forms.Form):
 
 class ContactForm(forms.Form):
     name = forms.CharField(max_length=64, label="Imię i nazwisko")
-    email = forms.EmailField(label="Email", max_length=64)
-    tekst = forms.CharField(widget=forms.Textarea, max_length=500, label="Wpisz treść wiadomości")
+    surname = forms.EmailField(label="Email", max_length=64)
+    message = forms.CharField(widget=forms.Textarea, max_length=500, label="Wpisz treść wiadomości")
 
 
 

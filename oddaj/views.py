@@ -57,13 +57,15 @@ class FormConfView(View):
 class FormView(LoginRequiredMixin, View):
     login_url = '/login'
     def get(self, request):
-        #cat = Category.objects.all()
+        #us = User.objects.get(id=)
         form = AddDonationForm()
         return TemplateResponse(request, 'add-donation.html', context={'form':form})
-    def post(self, reguest):
+    def post(self, request):
+        print("post1")
         #cat = Category.objects.all()
         form = AddDonationForm(request.POST)
         if form.is_valid():
+            print("form is valid")
             categories = form.cleaned_data['categories']
             quantity = form.cleaned_data['quantity']
             institution = form.cleaned_data['institution']
@@ -74,13 +76,18 @@ class FormView(LoginRequiredMixin, View):
             pick_up_date = form.cleaned_data['pick_up_date']
             pick_up_time = form.cleaned_data['pick_up_time']
             pick_up_comment = form.cleaned_data['pick_up_comment']
-            z = Donation.objects.create(categories=categories, quantity=quantity,  \
+            user = request.user
+            x = Donation.objects.create(quantity=quantity,  \
                 institution=institution, adress=adress, city=city, zip_code=zip_code,  \
                 phone_number=phone_number, pick_up_date=pick_up_date,  \
-                pick_up_time=pick_up_time, pick_up_comment=pick_up_comment)
-            z.save()
-            return HttpResponse("ok")
+                pick_up_time=pick_up_time, pick_up_comment=pick_up_comment, user=user)
+            x.save()
+            x.categories.add(categories)
+            print("after save")
+            return TemplateResponse(request, 'form-confirmation.html')
         else:
+            for field in form:
+                print(field, field.errors)
             return TemplateResponse(request, 'add-donation.html', context={'form':form})
 
 class RegisterUserView(View):
@@ -226,28 +233,35 @@ class TestView(View):
         form = AddDonationForm()
         return TemplateResponse(request, 'test.html', context={'form':form})
     def post(self, request):
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            quantity = form.cleaned_data['quantity']
-        return render (request, 'login.html', context={'form':form})
+        print ("udało sie nareszcie")
+        return HttpResponse("Jabadaba du")
 
 class ContactView(View):
     def get(self, request):
         form2 = ContactForm()
         return TemplateResponse(request, 'footer.html', context={'form2': form2})
     def post(self, request):
+        print("hhhhhhhh")
         form2 = ContactForm(request.POST)
         if form2.is_valid():
-            name = form.cleaned_data['name']
-            email = form.cleaned_data['email']
-            tekst = form.cleaned_data['tekst']
+            for x in us:
+                name = form.cleaned_data['name']
+                #surname = form.cleaned_data['surname']
+                message = form.cleaned_data['message']
+                subject = "{} {} wysłał/a wiadomość".format(name, surname)
+                from_email = form.cleaned_data['surname']
+                #'kontakt@oddajrzeczy.pl'
+                to_list = ['{}'.format(x.email)]
             # send email code goes here
-            message = "{} {} wysłał/a wiadomość o treści {}".format(name, email, tekst)
-            mail_admins('Kontakt', message)
-            return render(request, 'contact-answer.html')
+            #mail_admins('Kontakt', message)
+                send_mail(subject, message, from_email, to_list, fail_silently=True)
         else:
-            return TemplateResponse(request, 'contact.html', context={'form2': form2})
-        #return TemplateResponse(request, 'contact', {'form': form} 
+            return redirect(reverse('/index'))
+        return TemplateResponse(request, 'form-confirmation.html', {'form': form})
+        #     return render(request, 'contact-ans.html')
+        # else:
+        #     return TemplateResponse(request, 'contact.html', context={'form2': form2})
+        # #return TemplateResponse(request, 'contact', {'form': form} 
 
 class ContactConfView(View):
     def get(self, request):

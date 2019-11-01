@@ -55,7 +55,7 @@ class FormConfView(View):
 
 #@login_required(login_url='/login')
 class FormView(LoginRequiredMixin, View):
-    login_url = '/login'
+    #login_url = '/login'
     def get(self, request):
         #us = User.objects.get(id=)
         form = AddDonationForm()

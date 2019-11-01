@@ -6,30 +6,34 @@
 {% block content %}
 {% include "header2.html" %}
 
-<script type="text/javascript">
-function summaryMoje() {
-    var kategoria = document.getElementById("id_categories").value;
-    var ilosc = document.getElementById("id_quantity").value;
-    var instytucja = document.getElementById("id_institution").value;
-    var adres = document.getElementById("id_adress").value;
-    var miasto = document.getElementById("id_city").value;
+
+<script>
+console.log("Dupa");
+function summaryMoje(){
+    var kategoria = document.getElementById('id_categories').value;
+    var ilosc = document.getElementById('id_quantity').value;
+    var instytucja = document.getElementById('id_institution').value;
+    var adres = document.getElementById('id_adress').value;
+    var miasto = document.getElementById('id_city').value;
     var kod = document.getElementById("id_zip_code").value;
     var telefon = document.getElementById("id_phone_number").value;
-    var data_odbior = document.getElementById("id_pick_up_date").value;
+    var mies_odbior = document.getElementById("id_pick_up_date_month").value;
+    var rok_odbior = document.getElementById("id_pick_up_date_year").value;
+    var dzien_odbior = document.getElementById("id_pick_up_date_day").value;
     var czas_odbior = document.getElementById("id_pick_up_time").value;
     var komentarz = document.getElementById("id_pick_up_comment").value;
+    
     document.getElementById('worki').innerHTML = ilosc+" worki";
     document.getElementById('dla-kogo').innerHTML = "Dla "+instytucja;
     document.getElementById('sum_adres').innerHTML = adres;
     document.getElementById('sum_miasto').innerHTML = miasto;
     document.getElementById('sum_kod').innerHTML = kod;
     document.getElementById('sum_tel').innerHTML = telefon;
-    document.getElementById('data-odbioru').innerHTML = data_odbior;
+    document.getElementById('data-odbioru').innerHTML = dzien_odbior+"."+mies_odbior+"."+rok_odbior;
     document.getElementById('czas-odbioru').innerHTML = czas_odbior;
     document.getElementById('uwagi').innerHTML = komentarz;
 } 
-</script>
-
+</script> 
     <section class="form--steps">
       <div class="form--steps-instructions">
         <div class="form--steps-container">
@@ -281,5 +285,7 @@ function summaryMoje() {
 {% endif %} {% endcomment %}
       </div>
     </section>
+
+
 
 {% endblock %}

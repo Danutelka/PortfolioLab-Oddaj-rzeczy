@@ -24,7 +24,10 @@
                     {% for category in s.categories.all %}
                     <li>Kategoria: {{ category }}</li>
                     {% endfor %}
-                    <li>Kiedy zostały/zostaną odebrane: {{ s.pick_up_date }}</li>
+                    <li>odebrano? {{ s.is_taken }} 
+                        <button type="button">Zmień</button>
+                    </li>
+                    
                 {% endfor %}
                 </ul></h4>
             {% else %}

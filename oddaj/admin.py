@@ -10,4 +10,4 @@ class InstitutionAdmin(admin.ModelAdmin):
 
 @admin.register(Donation)
 class DonationAdmin(admin.ModelAdmin):
-    list_display = ('user', 'quantity', 'institution')
+    list_display = ('user', 'quantity', 'institution', 'is_taken')

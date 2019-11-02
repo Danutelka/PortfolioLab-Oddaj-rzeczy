@@ -65,10 +65,15 @@ function summaryMoje(){
            {% csrf_token %}
             {{ form.categories }}
             <label> Wybierz kategorie</label>
-                <span class="radio"></span>
+                {% comment %} <span class="radio"></span>
                 {% for category in categories %}
                 <span class="description"> {{ category.name}}</span>
-                {% endfor %}
+                {% endfor %} {% endcomment %}
+                <select name="birthYear">
+                {% for category in categories %}
+                <option class="description">{{ category.name}}</option>
+                {% endfor %} 
+                </select>
             </div>
             {% comment %} <div class="form-group form-group--checkbox">
               <label>

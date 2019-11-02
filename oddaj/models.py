@@ -44,7 +44,8 @@ class Donation(models.Model):
     pick_up_time = models.TimeField()
     pick_up_comment = models.CharField(max_length=250)
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
-
+    is_taken = models.BooleanField(default=False, blank=True, null=True)
+    
     class Meta:
         verbose_name = "Dar"
         verbose_name_plural = "Dary"

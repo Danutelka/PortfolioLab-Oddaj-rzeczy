@@ -150,6 +150,10 @@ class ProfileView(View):
             "dary": dary
             }
         return TemplateResponse(request, 'profile.html', context=context)
+    def post(self, request, pk):
+        user = User.objects.get(id=pk)
+        dary = Donation.objects.filter(user=user).order_by('-pick_up_date')
+
 
 class PasswordView(View):
     def get(self, request, pk):
@@ -242,9 +246,10 @@ class ContactView(View):
         return TemplateResponse(request, 'footer.html', context={'form2': form2})
     def post(self, request):
         print("hhhhhhhh")
+        use = User.objects.filter(is_superuser=True)
         form2 = ContactForm(request.POST)
-        if form2.is_valid():
-            for x in us:
+        if form.is_valid():
+            for x in use:
                 name = form.cleaned_data['name']
                 #surname = form.cleaned_data['surname']
                 message = form.cleaned_data['message']
@@ -263,6 +268,9 @@ class ContactView(View):
         #     return TemplateResponse(request, 'contact.html', context={'form2': form2})
         # #return TemplateResponse(request, 'contact', {'form': form} 
 
-class ContactConfView(View):
+class AnswerContView(View):
     def get(self, request):
+        return render(request, 'contact-answer.html')
+    def post(self, request):
+        #print ("udało sie nareszcie")
         return render(request, 'contact-answer.html')

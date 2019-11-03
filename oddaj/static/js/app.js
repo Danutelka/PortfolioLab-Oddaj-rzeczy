@@ -1,26 +1,4 @@
 
-// function summaryMoje(){
-//     var kategoria = document.getElementById("id_categories").value;
-//     var ilosc = document.getElementById("id_quantity").value;
-//     var instytucja = document.getElementById("id_institution").value;
-//     var adres = document.getElementById("id_adress").value;
-//     var miasto = document.getElementById("id_city").value;
-//     var kod = document.getElementById("id_zip_code").value;
-//     var telefon = document.getElementById("id_phone_number").value;
-//     var data_odbior = document.getElementById("id_pick_up_date").value;
-//     var czas_odbior = document.getElementById("id_pick_up_time").value;
-//     var komentarz = document.getElementById("id_pick_up_comment").value;
-    
-//     document.getElementById('worki').innerHTML = ilosc+" worki";
-//     document.getElementById('dla-kogo').innerHTML = "Dla "+instytucja;
-//     document.getElementById('sum_adres').innerHTML = adres;
-//     document.getElementById('sum_miasto').innerHTML = miasto;
-//     document.getElementById('sum_kod').innerHTML = kod;
-//     document.getElementById('sum_tel').innerHTML = telefon;
-//     document.getElementById('data-odbioru').innerHTML = data_odbior;
-//     document.getElementById('czas-odbioru').innerHTML = czas_odbior;
-//     document.getElementById('uwagi').innerHTML = komentarz;
-// } 
 function update_field() {
   var address = '/restfull/categories?ids=1,2' //todo zrob ids generycznie
   $.ajax({

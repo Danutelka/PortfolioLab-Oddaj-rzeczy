@@ -38,7 +38,7 @@ class LoginForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput(), label="Hasło", max_length=12)
 
 class AddDonationForm(forms.Form):
-    categories = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple, queryset=Category.objects.all())
+    categories = forms.ModelChoiceField(queryset=Category.objects.all())
     quantity = forms.IntegerField(min_value=0, max_value=100)
     institution = forms.ModelChoiceField(queryset=Institution.objects.all())
     adress = forms.CharField(max_length=250)
@@ -64,6 +64,8 @@ class ContactForm(forms.Form):
     name = forms.CharField(max_length=64, label="Imię i nazwisko")
     surname = forms.EmailField(label="Email", max_length=64)
     message = forms.CharField(widget=forms.Textarea, max_length=500, label="Wpisz treść wiadomości")
+
+
 
 
 

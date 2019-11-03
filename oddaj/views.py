@@ -53,17 +53,12 @@ class FormConfView(View):
     def get(self, request):
         return TemplateResponse(request, 'form-confirmation.html')
 
-
-#@login_required(login_url='/login')
 class FormView(LoginRequiredMixin, View):
-    #login_url = '/login'
     def get(self, request):
-        #us = User.objects.get(id=)
         form = AddDonationForm()
         return TemplateResponse(request, 'add-donation.html', context={'form':form})
     def post(self, request):
         print("post1")
-        #cat = Category.objects.all()
         form = AddDonationForm(request.POST)
         if form.is_valid():
             print("form is valid")
@@ -145,7 +140,7 @@ class LogoutView(View):
 class ProfileView(View):
     def get(self, request, pk):
         user = User.objects.get(id=pk)
-        dary = Donation.objects.filter(user=user).order_by('-pick_up_date')
+        dary = Donation.objects.filter(user=user).order_by('-is_taken')
         context = {
             "user": user,
             "dary": dary
@@ -153,7 +148,7 @@ class ProfileView(View):
         return TemplateResponse(request, 'profile.html', context=context)
     def post(self, request, pk):
         user = User.objects.get(id=pk)
-        dary = Donation.objects.filter(user=user).order_by('-pick_up_date')
+        dary = Donation.objects.filter(user=user).order_by('-is_taken')
 
 
 class PasswordView(View):

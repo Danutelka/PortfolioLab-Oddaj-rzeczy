@@ -36,6 +36,8 @@ function summary(){
     document.getElementById('uwagi').innerHTML = komentarz;
 } 
 </script> 
+
+
     <section class="form--steps">
       <div class="form--steps-instructions">
         <div class="form--steps-container">
@@ -58,30 +60,27 @@ function summary(){
 <!---->
       <div class="form--steps-container">
         <div class="form--steps-counter">Krok <span>1</span>/5</div>
-{% comment %} {% if request.user.is_authenticated %} {% endcomment %}
+
         <form action="\form" method="POST">
+
 <!-- STEP 1: class .active is switching steps -->
           <div data-step="1" class="active">
             <h3>Zaznacz komu chcesz oddać dary:</h3>
            <div class="form-group form-group--checkbox">
-            <label> Wybierz kategorie</label>
+          
                 {% comment %} {% for cat in form.categories %}
-                {% csrf_token %}
+               
                   <input type="checkbox" name="factura" value="{{ cat.name }}">
                 {% endfor %} {% endcomment %}
 
-
-           {{ form.categories }}
-            {% comment %}<label> Wybierz kategorie</label>
-                 <span class="radio"></span>
-                {% for category in categories %}
-                <span class="description"> {{ category.name}}</span>
-                {% endfor %} {% endcomment %}
-                {% comment %} <select name="birthYear">
-                {% for category in categories %}
-                <option class="description">{{ category.name}}</option>
-                {% endfor %} 
-                </select> {% endcomment %}
+           {% csrf_token %}
+           {{ form.categories}}
+             <label> Wybierz kategorie</label>
+        
+            </div>
+              <div class="form-group form-group--buttons">
+              <button type="button" class="btn next-step">Dalej</button>
+              </div>
             </div>
             {% comment %} <div class="form-group form-group--checkbox">
               <label>
@@ -95,50 +94,9 @@ function summary(){
                   >ubrania, które nadają się do ponownego użycia</span
                 >
               </label>
-            </div>
-
-            <div class="form-group form-group--checkbox">
-              <label>
-                <input
-                  type="checkbox"
-                  name="categories"
-                  value="clothes-useless"
-                />
-                <span class="checkbox"></span>
-                <span class="description">ubrania, do wyrzucenia</span>
-              </label>
-            </div>
-
-            <div class="form-group form-group--checkbox">
-              <label>
-                <input type="checkbox" name="categories" value="toys" />
-                <span class="checkbox"></span>
-                <span class="description">zabawki</span>
-              </label>
-            </div>
-
-            <div class="form-group form-group--checkbox">
-              <label>
-                <input type="checkbox" name="categories" value="books" />
-                <span class="checkbox"></span>
-                <span class="description">książki</span>
-              </label>
-            </div>
-
-            <div class="form-group form-group--checkbox">
-              <label>
-                <input type="checkbox" name="categories" value="other" />
-                <span class="checkbox"></span>
-                <span class="description">inne</span>
-              </label>
             </div> {% endcomment %}
 
-            <div class="form-group form-group--buttons">
-              <button type="button" class="btn next-step">Dalej</button>
-            </div>
-          </div>
-<!---->
-          <!-- STEP 2 -->
+<!-- STEP 2 -->
           <div data-step="2">
             <h3>Podaj liczbę 60l worków, w które spakowałeś/aś rzeczy:</h3>
 
@@ -154,7 +112,7 @@ function summary(){
             </div>
           </div>
 
-<!-- STEP 4 -->
+<!-- STEP 3 -->
           <div data-step="3">
             <h3>Wybierz organizacje, której chcesz pomóc:</h3>
 
@@ -164,13 +122,9 @@ function summary(){
               {{ form.institution }}
                 {% for inst in institution %}
                 <span class="description">
-
                   <div class="title">{{ inst.name }}</div>
-                  {% comment %} <div class="subtitle">{{ inst.description }}</div> {% endcomment %}
                 </span>
                 {% endfor %}
-
-
             </div>
 
             <div class="form-group form-group--buttons">
@@ -179,7 +133,7 @@ function summary(){
             </div>
           </div>
 
-          <!-- STEP 5 -->
+<!-- STEP 4 -->
           <div data-step="4">
             <h3>Podaj adres oraz termin odbioru rzecz przez kuriera:</h3>
 
@@ -195,16 +149,12 @@ function summary(){
                 </div>
 
                 <div class="form-group form-group--inline">
-                  <label>
-                    Kod pocztowy 
-                  </label>
+                  <label>Kod pocztowy</label>
                   {{ form.zip_code }}
                 </div>
 
                 <div class="form-group form-group--inline">
-                  <label>
-                    Numer telefonu 
-                  </label>
+                  <label>Numer telefonu </label>
                   {{ form.phone_number }}
                 </div>
               </div>
@@ -220,10 +170,7 @@ function summary(){
                 </div>
 
                 <div class="form-group form-group--inline">
-                  <label>
-                    Uwagi dla kuriera
-                    
-                  </label>
+                  <label>Uwagi dla kuriera</label>
                   {% csrf_token %}
                   {{ form.pick_up_comment }}
                 </div>
@@ -235,7 +182,7 @@ function summary(){
             </div>
           </div>
 
-<!-- STEP 6 -->
+<!-- PODSUMOWANIE -->
           <div data-step="5">
             <h3>Podsumowanie Twojej darowizny</h3>
 
@@ -247,20 +194,15 @@ function summary(){
                     <span class="icon icon-bag"></span>
                     <span class="summary--text">
                       <div id="worki">
-
                       </div>
                     </span>
-                    
                   </li>
-
                   <li>
                     <span class="icon icon-hand"></span>
                     <span class="summary--text">
                      <div id="dla-kogo">
-
                      </div>
-                     </span>
-                    
+                    </span>
                   </li>
                 </ul>
               </div>
@@ -293,9 +235,6 @@ function summary(){
             </div>
           </div>
         </form>
-{% comment %} {% else %}
-      Musisz być zalogowany. Przejdź do strony logowania ->
-{% endif %} {% endcomment %}
       </div>
     </section>
 

@@ -1,7 +1,24 @@
 from django import forms
 from django.forms import ModelForm
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext
+import re
 from .models import Category, Institution, Donation, TYP
+
+
+def validate_password(value):
+    special_characters = "[~\!@#\$%\^&\*\(\)_\+{}\":;'\[\]]"
+    if len(value) < 8:
+        raise ValidationError(ugettext('Hasło musi być dłuższe niż 8 znaków!'))
+    if not any(char.isdigit() for char in value):
+        raise ValidationError(ugettext('Hasło musi zawierać przynajmniej 1 liczbę!'))
+    if not any(char.islower() for char in value):
+        raise ValidationError(ugettext('Hasło musi zawierać przynajmniej 1 małą literę!'))
+    if not any(char.isupper() for char in value):
+        raise ValidationError(ugettext('Hasło musi zawierać przynajmniej 1 dużą literę!'))
+    if not any(char in special_characters for char in value):
+        raise ValidationError(ugettext('Hasło musi zawierać przynajmnniej 1 znak specjalny'))
 
 # class AddUserForm(forms.ModelForm):
 #     class Meta:
@@ -12,16 +29,16 @@ class RegisterUserForm(forms.Form):
     first_name = forms.CharField(label="Imię", max_length=30)
     last_name = forms.CharField(label="Nazwisko", max_length=40)
     email = forms.EmailField(label="Email", max_length=64)
-    password = forms.CharField(widget=forms.PasswordInput(), label="Hasło", max_length=10)
-    password_again = forms.CharField(widget=forms.PasswordInput(), label="Powtórz hasło", max_length=10)
-    log_on = forms.BooleanField(label="Logowanie po rejestracji:",required=False)
+    password = forms.CharField(widget=forms.PasswordInput(), label="Hasło", max_length=12, validators=[validate_password])
+    password_again = forms.CharField(widget=forms.PasswordInput(), label="Powtórz hasło", max_length=12, validators=[validate_password])
+    #log_on = forms.BooleanField(label="Logowanie po rejestracji:",required=False)
 
 class LoginForm(forms.Form):
     email = forms.CharField(max_length=30)
-    password = forms.CharField(widget=forms.PasswordInput(), label="Hasło", max_length=10)
+    password = forms.CharField(widget=forms.PasswordInput(), label="Hasło", max_length=12)
 
 class AddDonationForm(forms.Form):
-    categories = forms.ModelChoiceField(queryset=Category.objects.all())
+    categories = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple, queryset=Category.objects.all())
     quantity = forms.IntegerField(min_value=0, max_value=100)
     institution = forms.ModelChoiceField(queryset=Institution.objects.all())
     adress = forms.CharField(max_length=250)
@@ -29,7 +46,7 @@ class AddDonationForm(forms.Form):
     zip_code = forms.CharField(max_length=6)
     phone_number = forms.CharField(max_length=11)
     pick_up_date = forms.DateField(widget=forms.SelectDateWidget)
-    pick_up_time = forms.TimeField()
+    pick_up_time = forms.TimeField(widget=forms.TimeInput)
     pick_up_comment = forms.CharField(widget=forms.Textarea, max_length=400)
     
 class PasswordForm(forms.Form):

@@ -53,6 +53,7 @@ class FormConfView(View):
     def get(self, request):
         return TemplateResponse(request, 'form-confirmation.html')
 
+
 #@login_required(login_url='/login')
 class FormView(LoginRequiredMixin, View):
     #login_url = '/login'
@@ -108,7 +109,7 @@ class RegisterUserView(View):
                 if password == password_again:
                     u = User.objects.create_user(username, email, password, first_name=first_name, last_name=last_name)
                     u.save()
-                    return HttpResponseRedirect("regconf")
+                    return HttpResponseRedirect("/regconf")
                 else:
                     error.append('Hasła są różne')
             else:
@@ -197,18 +198,11 @@ class ChangeNameView(View):
         form = UserEditForm(request.POST)
         us = User.objects.get(id=pk)
         if form.is_valid():
-            us.first_name = form.cleaned_data['first_name']
-            us.last_name = form.cleaned_data['last_name']
-            if us.first_name is not None : 
-                us.save()
-            else: 
-                us.first_name = request.user.first_name
-                us.save()
-            if us.last_name is not None:
-                us.save()
-            else:
-                us.last_name = request.user.last_name
-                us.save()
+            if form.cleaned_data['first_name'] is not None and form.cleaned_data['first_name'] != '' : 
+                us.first_name =  form.cleaned_data['first_name']
+            if form.cleaned_data['last_name'] is not None and form.cleaned_data['last_name'] != '' : 
+                us.last_name =  form.cleaned_data['last_name']
+            us.save()
             return HttpResponseRedirect("/index")
         else:
             return HttpResponse("coś poszło nie tak...")
@@ -256,10 +250,11 @@ class ContactView(View):
                 subject = "{} {} wysłał/a wiadomość".format(name, surname)
                 from_email = form.cleaned_data['surname']
                 #'kontakt@oddajrzeczy.pl'
-                to_list = ['{}'.format(x.email)]
+                recipient_list = ['{}'.format(x.email)]
             # send email code goes here
             #mail_admins('Kontakt', message)
-                send_mail(subject, message, from_email, to_list, fail_silently=True)
+                send_mail(subject, message, from_email, recipient_list, fail_silently=True)
+                mail.send()
         else:
             return redirect(reverse('/index'))
         return TemplateResponse(request, 'form-confirmation.html', {'form': form})

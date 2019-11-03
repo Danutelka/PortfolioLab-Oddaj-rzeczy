@@ -21,7 +21,19 @@
 //     document.getElementById('czas-odbioru').innerHTML = czas_odbior;
 //     document.getElementById('uwagi').innerHTML = komentarz;
 // } 
-
+function update_field() {
+  var address = '/restfull/categories?ids=1,2' //todo zrob ids generycznie
+  $.ajax({
+      type: "GET",
+      url: address,
+      success: function (data) {
+            alert(data); //TODO tu bedziesz podmianiała opcje select
+      },
+      error: function (data) {
+          alert("cos sie popsulo")
+      }
+  });
+}
 document.addEventListener("DOMContentLoaded", function() {
   /**
    * HomePage - Help section
@@ -244,7 +256,10 @@ document.addEventListener("DOMContentLoaded", function() {
      */
     updateForm() {
       this.$step.innerText = this.currentStep;
-
+      if (this.currentStep==3)
+      {
+        update_field();
+      }
       // TODO: Validation
 
       this.slides.forEach(slide => {

@@ -9,10 +9,12 @@
 
 <script>
 console.log("Dupa");
-function summaryMoje(){
+function summary(){
     var kategoria = document.getElementById('id_categories').value;
     var ilosc = document.getElementById('id_quantity').value;
-    var instytucja = document.getElementById('id_institution').value;
+    //var instytucja = document.getElementById('id_institution').value;
+    var instytucja = document.getElementById('id_institution');
+    var string = instytucja.options[instytucja.selectedIndex].text;
     var adres = document.getElementById('id_adress').value;
     var miasto = document.getElementById('id_city').value;
     var kod = document.getElementById("id_zip_code").value;
@@ -24,7 +26,7 @@ function summaryMoje(){
     var komentarz = document.getElementById("id_pick_up_comment").value;
     
     document.getElementById('worki').innerHTML = ilosc+" worki";
-    document.getElementById('dla-kogo').innerHTML = "Dla "+instytucja;
+    document.getElementById('dla-kogo').innerHTML = "Dla "+ string;
     document.getElementById('sum_adres').innerHTML = adres;
     document.getElementById('sum_miasto').innerHTML = miasto;
     document.getElementById('sum_kod').innerHTML = kod;
@@ -62,18 +64,24 @@ function summaryMoje(){
           <div data-step="1" class="active">
             <h3>Zaznacz komu chcesz oddać dary:</h3>
            <div class="form-group form-group--checkbox">
-           {% csrf_token %}
-            {{ form.categories }}
             <label> Wybierz kategorie</label>
-                {% comment %} <span class="radio"></span>
+                {% comment %} {% for cat in form.categories %}
+                {% csrf_token %}
+                  <input type="checkbox" name="factura" value="{{ cat.name }}">
+                {% endfor %} {% endcomment %}
+
+
+           {{ form.categories }}
+            {% comment %}<label> Wybierz kategorie</label>
+                 <span class="radio"></span>
                 {% for category in categories %}
                 <span class="description"> {{ category.name}}</span>
                 {% endfor %} {% endcomment %}
-                <select name="birthYear">
+                {% comment %} <select name="birthYear">
                 {% for category in categories %}
                 <option class="description">{{ category.name}}</option>
                 {% endfor %} 
-                </select>
+                </select> {% endcomment %}
             </div>
             {% comment %} <div class="form-group form-group--checkbox">
               <label>
@@ -223,7 +231,7 @@ function summaryMoje(){
             </div>
             <div class="form-group form-group--buttons">
               <button type="button" class="btn prev-step">Wstecz</button>
-              <button type="button" class="btn next-step" onclick="summaryMoje()">Dalej</button>
+              <button type="button" class="btn next-step" onclick="summary()">Dalej</button>
             </div>
           </div>
 

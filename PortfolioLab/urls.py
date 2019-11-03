@@ -17,14 +17,15 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
-from oddaj.views import IndexView, FormConfView, FormView, LoginView, LogoutView, BaseView,  \
+from oddaj.views import IndexView, FormConfView, FormView, LoginView, LogoutView,  \
     RegisterUserView, ProfileView, RegisterConfView, PasswordView, EditProfileView, ChangeNameView,  \
     ResetPasswordView, AnswerContView, TestView
+from oddaj import rest
 
 urlpatterns = [
     path('admin/', admin.site.urls, name="admin"),
     path('', IndexView.as_view(), name="index"),
-    path('index', BaseView.as_view(), name="base"),
+    path('index', IndexView.as_view(), name="base"),
     # path('', BaseView.as_view(), name="base"),
     # path('index', IndexView.as_view(), name="index"),
     path('formconf', FormConfView.as_view(), name="form-conf"),
@@ -41,6 +42,6 @@ urlpatterns = [
     #path('contact', ContactConfView.as_view(), name="contact"),
     path('answer', AnswerContView.as_view(), name="answer"),
     path('test', TestView.as_view(), name="test"),
-    path('dupa', TestView.as_view(), name="test"),
+    path('restfull/categories', rest.get_institution, name="get_institution"),
 
 ]

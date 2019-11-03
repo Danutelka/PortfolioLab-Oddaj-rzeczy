@@ -15,10 +15,11 @@
     </section>
     <section id="profile_dary">
     <h2>Przekazane dary:</h2>
+        <ul>
         {% if dary is not None %}
             {% if dary.count > 0 %}
                 {% for s in dary %}
-                    <h4><ul>
+                    <h4>
                     <li>Ilość przekazanych worków: {{ s.quantity }}</li>
                     <li>Przekazano organizacji: {{ s.institution }}</li>
                     {% for category in s.categories.all %}

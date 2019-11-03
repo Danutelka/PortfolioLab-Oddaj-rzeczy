@@ -30,7 +30,7 @@ class Institution(models.Model):
         verbose_name_plural = "Instytucje"
 
     def __str__(self):
-        return "{} {};" .format(self.name, self.typ)
+        return "{}" .format(self.name)
 
 class Donation(models.Model):
     quantity = models.IntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(100)])

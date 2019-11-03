@@ -5,8 +5,10 @@
 
 {% block content %} 
 {% include "header.html" %}
+    <section id="reg-conf">
       <div class="slogan container container--90">
           <h2>Twoje konto zostało założone</h2>
-          <a href="{% url 'login' %}#login" class="btn btn--without-border">Zaloguj się</a>
+          {% comment %} <a href="{% url 'login' %}#login" class="btn btn--without-border">Zaloguj się</a> {% endcomment %}
       </div>
+    </section>
 {% endblock %}
